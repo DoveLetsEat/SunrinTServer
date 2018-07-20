@@ -66,15 +66,22 @@ app.post('/pLocations', (req, res) => {
                 }
 
                 newData.push({
-                    latitude: element.latitude,
-                    longtitude: element.longtitude,
+                    latitude: parseFloat(element.latitude),
+                    longtitude: parseFloat(element.longtitude),
                     name: element.name,
                     id: element._id,
-                    distance: Math.sqrt(distanceSquare) * 1000,
-                    startCost: element.startCost,
+                    distance: parseInt(Math.sqrt(distanceSquare) * 1000),
+                    startCost: parseInt(element.startCost),
                     startTime: element.startTime,
-                    moreCost: element.moreCost,
+                    moreCost: parseInt(element.moreCost),
                     moreTime: element.moreTime,
+                    address: element.address,
+                    weekdayStartTime: element.weekdayStartTime,
+                    weekdayEndTime: element.weekdayEndTime,
+                    satDayStartTime: element.satDayStartTime,
+                    satDayEndTime: element.satDayEndTime,
+                    holiDayStartTime: element.holiDayStartTime,
+                    holiDayEndTime: element.holiDayEndTime,
                     isOpen: isOpen
                 });
             }
@@ -84,27 +91,6 @@ app.post('/pLocations', (req, res) => {
                     data: { data: newData.sort((a, b) => a.distance - b.distance) },
                 });
             }
-        });
-    });
-});
-
-app.post('/pMoreInfo', (req, res) => {
-    Park.findOne({ _id: req.body.id }, (err, data) => {
-        if(err) {
-            res.json({header: {
-                response: false,
-                errorMessage: err.message
-            },
-            data: {
-                data: data
-            }});
-            return res.status(500).send();
-        }
-        res.json({
-            header: {
-                response: true
-            },
-            data: data
         });
     });
 });
