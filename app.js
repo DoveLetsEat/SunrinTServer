@@ -71,6 +71,10 @@ app.post('/pLocations', (req, res) => {
                     name: element.name,
                     id: element._id,
                     distance: Math.sqrt(distanceSquare) * 1000,
+                    startCost: element.startCost,
+                    startTime: element.startTime,
+                    moreCost: element.moreCost,
+                    moreTime: element.moreTime,
                     isOpen: isOpen
                 });
             }
