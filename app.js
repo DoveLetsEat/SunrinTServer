@@ -23,9 +23,11 @@ app.post('/pLocations', (req, res) => {
 
     Park.find(cost == "free" ? {costInfo: "무료"} : cost == "price" ? {costInfo: "유료"} : {}, (err, data) => {
         if(err) {
-            res.header({'response': false});
-            res.header({'errorMessage': err.message});
-            return res.status(500).send();
+            res.json({ header: {
+                errorMessage: err.message,
+                response: false
+            }});
+            return;
         }
         let newData = [];
         let count = 0;
@@ -42,8 +44,10 @@ app.post('/pLocations', (req, res) => {
                 });
             }
             if (count == data.length) {
-                res.header({'response': true});
-                res.json(newData.sort((a, b) => a.distance - b.distance));
+                res.json({
+                    header: { response: true },
+                    data: { data: newData.sort((a, b) => a.distance - b.distance) },
+                });
             }
         });
     });
@@ -52,12 +56,23 @@ app.post('/pLocations', (req, res) => {
 app.post('/pMoreInfo', (req, res) => {
     Park.findOne({ _id: req.body.id }, (err, data) => {
         if(err) {
-            res.header({'response': false});
-            res.header({'errorMessage': err.message});
+            res.json({header: {
+                response: false,
+                errorMessage: err.message
+            },
+            data: {
+                data: data
+            }});
             return res.status(500).send();
         }
-        res.header({'response': true});
-        res.json(data);
+        res.json({
+            header: {
+                response: true
+            },
+            data: {
+                data: data
+            }
+        });
     });
 });
 
