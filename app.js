@@ -1,14 +1,20 @@
-var express = require('express');
-var mongoose = require('mongoose');
+const express = require('express');
+const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/data');
-var path = require('path');
-var app = express();
+const path = require('path');
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var Park = mongoose.model('Park', { name: String, latitude: String, longtitude: String, weekdayStartTime: String, weekdayEndTime: String, satDayStartTime: String, satDayEndTime: String, holiDayStartTime: String, holiDayEndTime: String, costInfo: String, startCost: String, startTime: String, moreCost: String, moreTime: String, address: String });
+app.all('/*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+  });
+
+const Park = mongoose.model('Park', { name: String, latitude: String, longtitude: String, weekdayStartTime: String, weekdayEndTime: String, satDayStartTime: String, satDayEndTime: String, holiDayStartTime: String, holiDayEndTime: String, costInfo: String, startCost: String, startTime: String, moreCost: String, moreTime: String, address: String });
 
 app.post('/pLocations', (req, res) => {
     let x = req.body.latitude / 0.0090138;
