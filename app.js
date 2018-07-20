@@ -73,7 +73,7 @@ app.post('/pLocations', (req, res) => {
                     distance: parseInt(Math.sqrt(distanceSquare) * 1000),
                     startCost: parseInt(element.startCost),
                     startTime: parseInt(element.startTime),
-                    moreCost: parseInt(element.moreCost),
+                    moreNeedCost: parseInt(element.moreCost),
                     moreTime: parseInt(element.moreTime),
                     address: element.address,
                     weekdayStartTime: element.weekdayStartTime,
