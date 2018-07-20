@@ -69,9 +69,7 @@ app.post('/pMoreInfo', (req, res) => {
             header: {
                 response: true
             },
-            data: {
-                data: data
-            }
+            data: data
         });
     });
 });
