@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/data');
 const path = require('path');
+const holidayKR = require('holiday-kr');
 const app = express();
 
 app.use(express.json());
@@ -35,12 +36,42 @@ app.post('/pLocations', (req, res) => {
             count++;
             let distanceSquare = ((element.latitude / 0.0090138 - x) * (element.latitude / 0.0090138 - x) + (element.longtitude / 0.010954102 - y) * (element.longtitude / 0.010954102 - y));
             if (distanceSquare <= 9) {
+                // time
+                let currentDate = new Date();
+                let isOpen = false;
+
+                if (!holidayKR.isSolarHoliday(currentDate.getYear() + 1900, currentDate.getMonth(), currentDate.getDate())) {
+                    if (currentDate == 6) {
+                        if (parseInt(element.satDayStartTime.charAt(0) * 10) + parseInt(element.satDayStartTime.charAt(1)) == parseInt(element.satDayEndTime.charAt(0) * 10) + parseInt(element.satDayEndTime.charAt(1)))
+                            isOpen = true;   
+                        else if (parseInt(element.satDayStartTime.charAt(0) * 10) + parseInt(element.satDayStartTime.charAt(1)) < currentDate.getHours() && currentDate.getHours() < parseInt(element.satDayEndTime.charAt(0) * 10) + parseInt(element.satDayEndTime.charAt(1)))
+                            isOpen = true;
+                        else if ((parseInt(element.satDayStartTime.charAt(0) * 10) + parseInt(element.satDayStartTime.charAt(1)) == currentDate.getHours() || parseInt(element.satDayEndTime.charAt(0) * 10) + parseInt(element.satDayEndTime.charAt(1)) == currentDate.getHours() ) && parseInt(element.satDayStartTime.charAt(3) * 10) + parseInt(element.satDayStartTime.charAt(4)) <= currentDate.getMinutes() && currentDate.getMinutes() <= parseInt(element.satDayEndTime.charAt(3) * 10) + parseInt(element.satDayEndTime.charAt(4)))
+                            isOpen = true;
+                    } else {
+                        if (parseInt(element.weekdayStartTime.charAt(0) * 10) + parseInt(element.weekdayStartTime.charAt(1)) == parseInt(element.weekdayEndTime.charAt(0) * 10) + parseInt(element.weekdayEndTime.charAt(1)))
+                            isOpen = true;   
+                        else if (parseInt(element.weekdayStartTime.charAt(0) * 10) + parseInt(element.weekdayStartTime.charAt(1)) < currentDate.getHours() && currentDate.getHours() < parseInt(element.weekdayEndTime.charAt(0) * 10) + parseInt(element.weekdayEndTime.charAt(1)))
+                            isOpen = true;
+                        else if ((parseInt(element.weekdayStartTime.charAt(0) * 10) + parseInt(element.weekdayStartTime.charAt(1)) == currentDate.getHours() || parseInt(element.weekdayEndTime.charAt(0) * 10) + parseInt(element.weekdayEndTime.charAt(1)) == currentDate.getHours() ) && parseInt(element.weekdayStartTime.charAt(3) * 10) + parseInt(element.weekdayStartTime.charAt(4)) <= currentDate.getMinutes() && currentDate.getMinutes() <= parseInt(element.weekdayEndTime.charAt(3) * 10) + parseInt(element.weekdayEndTime.charAt(4)))
+                            isOpen = true;
+                    }
+                } else {
+                    if (parseInt(element.holiDayStartTime.charAt(0) * 10) + parseInt(element.holiDayStartTime.charAt(1)) == parseInt(element.holiDayEndTime.charAt(0) * 10) + parseInt(element.holiDayEndTime.charAt(1)))
+                        isOpen = true;   
+                    else if (parseInt(element.holiDayStartTime.charAt(0) * 10) + parseInt(element.holiDayStartTime.charAt(1)) < currentDate.getHours() && currentDate.getHours() < parseInt(element.holiDayEndTime.charAt(0) * 10) + parseInt(element.holiDayEndTime.charAt(1)))
+                        isOpen = true;
+                    else if ((parseInt(element.holiDayStartTime.charAt(0) * 10) + parseInt(element.holiDayStartTime.charAt(1)) == currentDate.getHours() || parseInt(element.holiDayEndTime.charAt(0) * 10) + parseInt(element.holiDayEndTime.charAt(1)) == currentDate.getHours() ) && parseInt(element.holiDayStartTime.charAt(3) * 10) + parseInt(element.holiDayStartTime.charAt(4)) <= currentDate.getMinutes() && currentDate.getMinutes() <= parseInt(element.holiDayEndTime.charAt(3) * 10) + parseInt(element.holiDayEndTime.charAt(4)))
+                        isOpen = true;
+                }
+
                 newData.push({
                     latitude: element.latitude,
                     longtitude: element.longtitude,
                     name: element.name,
                     id: element._id,
-                    distance: Math.sqrt(distanceSquare) * 1000
+                    distance: Math.sqrt(distanceSquare) * 1000,
+                    isOpen: isOpen
                 });
             }
             if (count == data.length) {
