@@ -87,21 +87,33 @@ app.post('/pLocations', (req, res) => {
 
 app.post('/pMoreInfo', (req, res) => {
     Park.findOne({ _id: req.body.id }, (err, data) => {
+        let newData = {
+            id: data._id,
+            startCost: parseInt(data.startCost),
+            startTime: parseInt(data.startTime),
+            moreCost: parseInt(data.moreCost),
+            moreTime: parseInt(data.moreTime),
+            weekdayStartTime: data.weekdayStartTime,
+            weekdayEndTime: data.weekdayEndTime,
+            satDayStartTime: data.satDayStartTime,
+            satDayEndTime: data.satDayEndTime,
+            holiDayStartTime: data.holiDayStartTime,
+            holiDayEndTime: data.holiDayEndTime,
+        }
         if(err) {
             res.json({header: {
                 response: false,
                 errorMessage: err.message
-            },
-            data: {
-                data: data
-            }});
+                },
+                data: newData
+            });
             return res.status(500).send();
         }
         res.json({
             header: {
                 response: true
             },
-            data: data
+            data: newData
         });
     });
 });
