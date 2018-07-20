@@ -9572,11 +9572,11 @@ const data = [
     {"latitude": "37.5619297455", "longtitude": "127.059095191", "weekdayStartTime": "00:00", "weekdayEndTime": "24:00", "satDayStartTime": "00:00","satDayEndTime": "24:00", "holiDayStartTime": "00:00", "holiDayEndTime": "24:00", "costInfo": "유료", "startCost": "0", "startTime": "0", "moreCost": "0", "moreTime": "0", "address": "서울특별시 성동구 천호대로 364", "name": "(주)캘빈주차장"},
     ]
 
-const Park = mongoose.model('Park', { name: String, latitude: String, longtitude: String, weekdayStartTime: String, weekdayEndTime: String, satDayStartTime: String, satDayEndTime: String, holiDayStartTime: String, holiDayEndTime: String, costInfo: String, startCost: String, startTime: String, moreCost: String, moreTime: String, address: String });
+const Park = mongoose.model('park', { name: String, latitude: String, longtitude: String, weekdayStartTime: String, weekdayEndTime: String, satDayStartTime: String, satDayEndTime: String, holiDayStartTime: String, holiDayEndTime: String, costInfo: String, startCost: String, startTime: String, moreCost: String, moreTime: String, address: String });
 
 data.forEach(element => {
     var parkData = new Park({name: element.name, latitude: element.latitude, longtitude: element.longtitude, weekdayStartTime: element.weekdayStartTime, weekdayEndTime: element.weekdayEndTime, satDayStartTime: element.satDayStartTime, satDayEndTime: element.satDayEndTime, holiDayStartTime: element.holiDayStartTime, holiDayEndTime: element.holiDayEndTime, costInfo: element.costInfo, startCost: element.startCost, startTime: element.startTime, moreCost: element.moreCost, moreTime: element.moreTime, address: element.address })
-    parkData.save().then();
-    console.log(".");
+    parkData.save().then(() => console.log("."));
+    
 });
 console.log("done");
