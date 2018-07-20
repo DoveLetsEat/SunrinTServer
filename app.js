@@ -21,7 +21,7 @@ app.post('/pLocations', (req, res) => {
     let y = req.body.longtitude / 0.010954102;
     let cost = req.body.cost;
 
-    Park.find(cost == "무료" ? {costInfo: "무료"} : {}, (err, data) => {
+    Park.find(cost == "free" ? {costInfo: "무료"} : cost == "price" ? {costInfo: "유료"} : {}, (err, data) => {
         if(err) {
             res.header({'response': false});
             res.header({'errorMessage': err.message});
