@@ -42,7 +42,6 @@ app.post('/pLocations', (req, res) => {
                 });
             }
             if (count == data.length) {
-                res.header({'token': req.headers.token});
                 res.header({'response': true});
                 res.json(newData.sort((a, b) => a.distance - b.distance));
             }
@@ -57,7 +56,6 @@ app.post('/pMoreInfo', (req, res) => {
             res.header({'errorMessage': err.message});
             return res.status(500).send();
         }
-        res.header({'token': req.headers.token});
         res.header({'response': true});
         res.json(data);
     });
